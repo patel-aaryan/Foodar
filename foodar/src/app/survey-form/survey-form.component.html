@@ -1,0 +1,32 @@
+<div class="container">
+  <form #f="ngForm" (ngSubmit)="searchStore(storeName.value)" align="center">
+    <mat-form-field appearance="fill" class="store-form">
+      <mat-label>Select a Company</mat-label>
+      <input
+        type="text"
+        placeholder="Pick one"
+        aria-label="Select a Company"
+        matInput
+        [formControl]="storeName"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of filteredOptions | async"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="!storeName.valid"
+      style="margin-left: 10px"
+    >
+      Search
+    </button>
+  </form>
+</div>
