@@ -1,31 +1,16 @@
-.store-form {
-  width: 500px;
-}
-
-.container-fluid {
-  background-color: rgb(255, 255, 255);
-  border-radius: 0.3rem;
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 1px 8px;
-  padding: 30px;
-  border-radius: 4px;
-  margin-top: 100px;
-  margin-bottom: 70px;
-}
-
-.container-md {
-  margin-top: 80px;
-  text-align: center;
-  margin-bottom: 15px;
+.autocomplete-input {
+  width: 100%;
 }
 
 .container {
   background-color: rgb(255, 255, 255);
-  border-radius: 0.3rem;
   box-shadow: rgba(0, 0, 0, 0.8) 0px 1px 8px;
-  padding: 20px;
-  border-radius: 4px;
-  margin-top: 10px;
-  margin-bottom: 50px;
-  max-width: 60%;
-  max-height: 700px;
+  padding: 40px;
+  border-radius: 50px;
+  margin-top: 50px;
+  max-width: 50%;
+}
+
+.form-control {
+  margin: 20px 0;
 }

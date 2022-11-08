@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { LocationValidator } from '../validators/location.validators';
 
 @Component({
   selector: 'survey-form',
@@ -9,7 +10,24 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./survey-form.component.css'],
 })
 export class SurveyFormComponent implements OnInit {
-  storeName = new FormControl('', [Validators.required]);
+  searchRec = new FormGroup({
+    datetime: new FormControl('', Validators.required),
+    location: new FormControl('', [
+      Validators.required,
+      LocationValidator.validOption,
+    ]),
+  });
+
+  get date() {
+    return this.searchRec.get('date');
+  }
+  get time() {
+    return this.searchRec.get('time');
+  }
+  get location() {
+    return this.searchRec.get('location');
+  }
+
   options: string[] = [
     'Google',
     'Microsoft',
@@ -22,7 +40,7 @@ export class SurveyFormComponent implements OnInit {
   filteredOptions!: Observable<string[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.storeName!.valueChanges.pipe(
+    this.filteredOptions = this.location!.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value || ''))
     );
@@ -35,7 +53,8 @@ export class SurveyFormComponent implements OnInit {
       option.toLowerCase().includes(filterValue)
     );
   }
-  searchStore(value: any) {
+
+  search(value: any) {
     console.log(value);
   }
 }

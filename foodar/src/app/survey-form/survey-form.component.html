@@ -1,31 +1,40 @@
 <div class="container">
-  <form #f="ngForm" (ngSubmit)="searchStore(storeName.value)" align="center">
-    <mat-form-field appearance="fill" class="store-form">
-      <mat-label>Select a Company</mat-label>
+  <h1 align="center">Foodar</h1>
+  <form [formGroup]="searchRec" #f="ngForm" (ngSubmit)="search(f.value)">
+    <div class="form-control">
+      <label for="datetime">Date</label> <br />
       <input
-        type="text"
-        placeholder="Pick one"
-        aria-label="Select a Company"
-        matInput
-        [formControl]="storeName"
-        [matAutocomplete]="auto"
+        formControlName="datetime"
+        id="datetime"
+        type="datetime-local"
+        class="form-control"
       />
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option"
-        >
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    </div>
 
-    <button
-      class="btn btn-primary"
-      type="submit"
-      [disabled]="!storeName.valid"
-      style="margin-left: 10px"
-    >
+    <div class="form-control">
+      <label for="location">Location</label> <br />
+      <mat-form-field appearance="fill" class="autocomplete-input">
+        <mat-label>Select a Location</mat-label>
+        <input
+          type="text"
+          placeholder="Select"
+          aria-label="Select a Location"
+          matInput
+          formControlName="location"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!location?.valid">
       Search
     </button>
   </form>
