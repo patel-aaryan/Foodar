@@ -10,8 +10,10 @@ import { LocationValidator } from '../validators/location.validators';
   styleUrls: ['./survey-form.component.css'],
 })
 export class SurveyFormComponent implements OnInit {
+  fullDate = new Date()
+  today = `${this.fullDate.getFullYear()}-${this.fullDate.getMonth()}-${this.fullDate.getDay()}`
   searchRec = new FormGroup({
-    datetime: new FormControl('', Validators.required),
+    datetime: new FormControl(this.today, Validators.required),
     location: new FormControl('', [
       Validators.required,
       LocationValidator.validOption,
