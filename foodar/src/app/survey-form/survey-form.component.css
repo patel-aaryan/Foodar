@@ -3,14 +3,20 @@
 }
 
 .container {
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(235, 235, 235);
   box-shadow: rgba(0, 0, 0, 0.8) 0px 1px 8px;
   padding: 40px;
   border-radius: 50px;
-  margin-top: 50px;
+  margin-top: 20px;
   max-width: 50%;
 }
 
 .form-control {
+  background-color: rgb(235, 235, 235);
   margin: 20px 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
 }

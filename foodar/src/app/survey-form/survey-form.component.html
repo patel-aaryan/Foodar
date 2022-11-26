@@ -1,41 +1,95 @@
-<div class="container">
-  <h1 align="center">Foodar</h1>
-  <form [formGroup]="searchRec" #f="ngForm" (ngSubmit)="search(f.value)">
-    <div class="form-control">
-      <label for="datetime">Date</label> <br />
+<div class="container" style="margin-top: 50px">
+  <div align="center">
+    <img src="https://i.ibb.co/Z8gz3Kr/logo.jpg" alt="logo" />
+  </div>
+  <form [formGroup]="searchRec" #f="ngForm" (ngSubmit)="find(f.value)">
+    <!-- <div class="form-control">
+      <label for="date">Date</label> <br />
       <input
-        formControlName="datetime"
-        id="datetime"
+        formControlName="date"
+        id="date"
         type="date"
         class="form-control"
       />
-    </div>
+    </div> -->
 
     <div class="form-control">
-      <label for="location">Location</label> <br />
+      <label for="state">State:</label> <br />
       <mat-form-field appearance="fill" class="autocomplete-input">
-        <mat-label>Select a Location</mat-label>
+        <mat-label>Select a State</mat-label>
         <input
           type="text"
           placeholder="Select"
-          aria-label="Select a Location"
+          aria-label="Select a State"
           matInput
-          formControlName="location"
-          [matAutocomplete]="auto"
+          formControlName="state"
+          [matAutocomplete]="auto1"
         />
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
           <mat-option
-            *ngFor="let option of filteredOptions | async"
-            [value]="option"
+            *ngFor="let state of filteredStates | async"
+            [value]="state"
           >
-            {{ option }}
+            {{ state }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <div class="alert alert-danger" *ngIf="state?.touched && state?.invalid">
+        <div *ngIf="state?.errors?.['required']">State is Required</div>
+        <div *ngIf="state?.errors?.['validOption']">State is Invalid</div>
+      </div>
     </div>
 
-    <button class="btn btn-primary" type="submit" [disabled]="!location?.valid">
-      Search
-    </button>
+    <div class="form-control">
+      <label for="city">City:</label> <br />
+      <mat-form-field appearance="fill" class="autocomplete-input">
+        <mat-label>Select a City</mat-label>
+        <input
+          type="text"
+          placeholder="Select"
+          aria-label="Select a City"
+          matInput
+          formControlName="city"
+          [matAutocomplete]="auto2"
+        />
+        <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+          <mat-option
+            *ngFor="let city of filteredCities | async"
+            [value]="city"
+          >
+            {{ city }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div class="alert alert-danger" *ngIf="city?.touched && city?.invalid">
+        <div *ngIf="city?.errors?.['required']">City is Required</div>
+        <div *ngIf="city?.errors?.['validOption']">State is Invalid</div>
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="btn btn-primary" type="submit" [disabled]="!f.valid">
+        Search
+      </button>
+      <button class="btn btn-primary" type="reset" (click)="clear()">
+        Clear
+      </button>
+    </div>
   </form>
+</div>
+
+<div class="container" *ngIf="showResults">
+  <h1 align="center">Our Recommendations</h1>
+  <div
+    class="container"
+    *ngFor="let item of recommend; index as i"
+    style="max-width: 100%"
+    [style.background-color]="choiceColours[i]"
+  >
+    <h3>
+      <b>Name:</b> {{ item.name }} <br />
+      <b>Address:</b> {{ item.address }}, {{ item.city }}, {{ item.state }}
+      <br />
+      <a [href]="item.website"><b>Learn More</b></a>
+    </h3>
+  </div>
 </div>

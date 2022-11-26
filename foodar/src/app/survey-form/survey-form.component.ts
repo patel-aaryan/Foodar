@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { LocationValidator } from '../validators/location.validators';
+import { DatasetService } from '../dataset.service';
+import data from '../dataset/data.json';
+import { restaurant } from '../restaurant';
+import { CityValidator } from '../validators/city.validators';
+import { StateValidator } from '../validators/state.validators';
 
 @Component({
   selector: 'survey-form',
@@ -10,53 +14,117 @@ import { LocationValidator } from '../validators/location.validators';
   styleUrls: ['./survey-form.component.css'],
 })
 export class SurveyFormComponent implements OnInit {
-  fullDate = new Date()
-  today = `${this.fullDate.getFullYear()}-${this.fullDate.getMonth()}-${this.fullDate.getDay()}`
+  names: string[] = [];
+  addresses: string[] = [];
+  cities: string[] = [];
+  states: string[] = [];
+  websites: string[] = [];
+  recommend: restaurant[] = [];
+  showResults: boolean = false;
+
+  nameList = Object.values(data.name);
+  addressList = Object.values(data.address);
+  cityList = Object.values(data.cities);
+  stateList = Object.values(data.states);
+  countryList = Object.values(data.country);
+  postalList = Object.values(data.postalCode);
+  websiteList = Object.values(data.websites);
+
+  constructor(service: DatasetService) {
+    this.names = service.getName();
+    this.addresses = service.getAddresses();
+    this.cities = service.getCities();
+    this.states = service.getStates();
+    this.websites = service.getWebsite();
+  }
+
   searchRec = new FormGroup({
-    datetime: new FormControl(this.today, Validators.required),
-    location: new FormControl('', [
+    date: new FormControl(''),
+    state: new FormControl('', [
       Validators.required,
-      LocationValidator.validOption,
+      StateValidator.validOption,
     ]),
+    city: new FormControl('', [Validators.required, CityValidator.validOption]),
   });
 
-  get date() {
-    return this.searchRec.get('date');
+  get state() {
+    return this.searchRec.get('state');
   }
-  get time() {
-    return this.searchRec.get('time');
-  }
-  get location() {
-    return this.searchRec.get('location');
+  get city() {
+    return this.searchRec.get('city');
   }
 
-  options: string[] = [
-    'Google',
-    'Microsoft',
-    'Apple',
-    'Netflix',
-    'Amazon',
-    'Facebook',
-  ];
-
-  filteredOptions!: Observable<string[]>;
+  filteredStates!: Observable<string[]>;
+  filteredCities!: Observable<string[]>;
 
   ngOnInit() {
-    this.filteredOptions = this.location!.valueChanges.pipe(
+    this.filteredStates = this.state!.valueChanges.pipe(
       startWith(''),
-      map((value) => this._filter(value || ''))
+      map((value) => this._filterStates(value || ''))
+    );
+    this.filteredCities = this.city!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterCities(value || ''))
     );
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private _filterStates(value: string): string[] {
+    const filterState = value.toLowerCase();
 
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    return this.states.filter((c) => c.toLowerCase().includes(filterState));
   }
 
-  search(value: any) {
-    console.log(value);
+  // citiesInSate: string[] = [];
+  // cityInState(value: string) {
+  //   for (let i = 0; i < this.stateList.length; i++) {
+  //     if (value == this.stateList[i]) this.citiesInSate.push(this.stateList[i]);
+  //   }
+  // }
+
+  private _filterCities(value: string): string[] {
+    const filterCity = value.toLowerCase();
+    return this.cities.filter((c) => c.toLowerCase().includes(filterCity));
+  }
+
+  // showCity = false;
+  // cityFilter() {
+  //   if (this.state?.valid) {
+  //     this.city?.enable();
+  //     this.showCity = true;
+  //   } else {
+  //     this.city?.reset();
+  //     this.city?.disable();
+  //   }
+  // }
+
+  find(value: any) {
+    this.recommend = [];
+    for (let i = 0; i < this.cityList.length; i++) {
+      if (value.city == this.cityList[i] && this.recommend.length < 3) {
+        let place = {
+          name: this.nameList[i],
+          address: this.addressList[i],
+          city: this.cityList[i],
+          state: this.stateList[i],
+          country: this.countryList[i],
+          postal: this.postalList[i],
+          website: this.websiteList[i],
+        };
+
+        let names: string[] = [];
+        for (let item of this.recommend) {
+          names.push(item.name);
+        }
+
+        if (!names.includes(place.name)) this.recommend.push(place);
+      }
+    }
+    this.showResults = true;
+  }
+
+  choiceColours = ['#fff996', '#afffff', '#ff8c8c'];
+
+  clear() {
+    this.showResults = false;
   }
 }
