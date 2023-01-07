@@ -13,5 +13,5 @@ We want to add more parameters to the search to make it more specific to the use
 User Preferences
 We want to customize the experience for our users. Thus, adding more parameters to the search (i.e. spice levels, cuisine type) will ensure a personalized experience for the users.
 Restaurant Profiles
-To take this a step further, restaurants with large demonstrated interest can establish their own customizable profiles on the webpage for consumers to view.
+In order to take this a step further, restaurants with large demonstrated interest can establish their own customizable profiles on the webpage for consumers to view.
 Developing user and restaurant profiles will make the entire user experience more intuitive and frienly, while making the entire process easier to use.
